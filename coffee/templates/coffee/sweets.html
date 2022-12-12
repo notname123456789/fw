@@ -1,0 +1,89 @@
+{% extends 'sweets/home.html' %}
+
+
+{% block content %}
+{% if alarma%}
+Столько нет
+{%endif%}
+{% for el in product_on_site %}
+
+<div class="pro" id="{% cycle 'row1' 'row2' %}">
+<h2><a href="{%url 'coffee_dv' el.id%}" class="floating-button_2">{{ el.name }}</a></h2>
+<b><p>ЦЕНА - {{ el.price }} ₽ | В наличии {{el.amount}} грамм</p></b>
+<img src="../../{{el.image}}" class="pro_img"/>
+<p>{{el.desc}}</p>
+
+
+<div>
+
+{% if el.amount >= 50 %}
+<form  method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="to_basket" value="{{ el.id }}">
+
+
+        {% if el.id|slugify in b_data_gramm.keys|slugify %}
+        
+        {% for key, value in b_data_gramm.items %}
+        {% if key|slugify == el.id|slugify %}
+        <input type="number" name="quantity" value="{{value|slugify}}" min="50" max="999999">
+        {%endif%}
+        {% endfor %}
+
+        {%else%}
+        <input type="number" name="quantity" value="50" min="50" max="999999">
+        {%endif%}
+
+        <button type="submit">купить</button>
+</form>
+
+{%else%}
+<b>Товара нет в наличии</b>
+{%endif%}
+</div>
+
+
+{% for sel in b_data %}
+    {% if sel == el.id %}
+<div>
+    <form method="post">
+    {% csrf_token %}
+    <button name="delete_from_basket" value="{{el.id}}" type="submit">Удалить из корзины</button>
+    </form>
+</div>
+    {%endif%}
+{% endfor %}
+<div>
+    <form method="post">
+    {% csrf_token %}
+    <button name="to_like" value="{{el.id}}" type="submit">в понравившееся</button>
+    </form>
+</div>
+
+{% for sel in s_data %}
+    {% if sel == el.id %}
+<div>
+    <form method="post">
+    {% csrf_token %}
+    <button name="delete_from_like" value="{{el.id}}" type="submit">удалить из понравившихся</button>
+    </form>
+</div>
+    {%endif%}
+{% endfor %}
+
+
+
+</div>
+
+{%endfor%}
+{% endblock %}
+
+{% block content_2 %}
+{% for i in amount %}
+<a href="{{i}}">{{i}}</a>
+{%endfor%}
+{% endblock %}
+
+{% block content_3 %}
+<a href="{%url 'home' %}" class="floating-button">домой</a>
+{% endblock %}

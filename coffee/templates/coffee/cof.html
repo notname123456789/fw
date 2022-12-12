@@ -1,0 +1,252 @@
+{% extends 'coffee/home.html' %}
+
+
+{% block content %}
+
+{% if alarma%}
+Столько нет
+{%endif%}
+
+{% for el in product_on_site %}
+
+<div class="pro" id="{% cycle 'row1' 'row2' %}">
+<h2><a href="{%url 'coffee_dv' el.id%}" class="floating-button_2">{{ el.name }}</a></h2>
+<b><p>ЦЕНА - {{ el.price }} ₽ за порцию | В наличии {{el.amount}} порций</p></b>
+
+<img src="../../{{el.image}}" class="pro_img"/>
+<p>{{el.desc}}</p>
+{% if el.discount%}
+    {{el.old_price}}
+{%endif%}
+<div name="top" style="display:flex">
+<div class="b2_pro">
+<div name="name">
+{% if el.amount >= 50 %}
+<div class="b1_pro">
+<button id="{{ forloop.counter0 }}_minus" class="pm">-</button>
+<form  method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="to_basket" value="{{ el.id }}">
+        {% with kostil=forloop.counter0%}
+        {% if el.id|slugify in b_data_gramm.keys|slugify %}
+        {% for key, value in b_data_gramm.items %}        
+        {% if key|slugify == el.id|slugify %}
+        <input type="number" name="quantity" value="{{value|slugify}}" min="1" max="{{el.amount}}" id="{{kostil}}_fm" required step="1" class="form_buy">  
+        {%endif%}
+        {% endfor %}
+
+        {%else%}
+        <input type="number" name="quantity" value="0" min="1" max="{{el.amount}}" id="{{kostil}}_fm" required step="1" class="form_buy">
+        {%endif%}
+        <div hidden="true" id="{{kostil}}_pr">{{ el.price }}</div>
+        {% endwith %}
+        <button type="submit" class="buy_button">купить</button>
+</form>
+<button id="{{ forloop.counter0 }}_plus" class="pm">+</button>
+</div>
+
+<div>Итого: <div id="{{ forloop.counter0 }}_sum">0₽</div></div>
+{%else%}
+<b>Товара нет в наличии</b>
+{%endif%}
+</div>
+
+
+{% for sel in b_data %}
+    {% if sel == el.id %}
+
+    <form method="post">
+    {% csrf_token %}
+    <button name="delete_from_basket" value="{{el.id}}" type="submit">Удалить из корзины</button>
+    </form>
+
+
+    {%endif%}
+{% endfor %}
+</div>
+<div name="name">
+<div>
+    <form method="post">
+    {% csrf_token %}
+    <button name="to_like" value="{{el.id}}" type="submit">в понравившееся</button>
+    </form>
+</div>
+
+{% for sel in s_data %}
+    {% if sel == el.id %}
+<div>
+    <form method="post">
+    {% csrf_token %}
+    <button name="delete_from_like" value="{{el.id}}" type="submit">удалить из понравившихся</button>
+    </form>
+</div>
+    {%endif%}
+{% endfor %}
+</div>
+</div>
+
+</div>
+{%endfor%}
+
+<script>
+        function codeAddress()
+        {
+            const windowInnerWidth = document.documentElement.clientWidth
+
+            var elements = document.getElementsByClassName("pro");
+            var style_2;
+            if (windowInnerWidth < 1005) {
+                for (var i = 0; i < elements.length; i++) {
+
+                    style_2 = getComputedStyle(elements[i]);
+                    elements[i].style.width = "49%"
+                }
+            }
+        }
+    window.onload = codeAddress
+    var pr1 = document.getElementById('0_pr')
+    var pr2 = document.getElementById('1_pr')
+    var pr3 = document.getElementById('2_pr')
+    var pr4 = document.getElementById('3_pr')
+    var pr5 = document.getElementById('4_pr')
+    var pr6 = document.getElementById('5_pr')
+try {
+var minus1 = document.getElementById('0_minus'),
+plus1 = document.getElementById('0_plus'),
+input1 = document.getElementById('0_fm');
+// обработчик ввода символа1
+input1.oninput = function() {
+    document.getElementById('0_sum').innerHTML = input1.value * pr1.innerHTML;
+  };
+minus1.addEventListener('click',function(){
+    input1.stepDown();
+    var printBlock = document.getElementById("0_sum");
+    printBlock.textContent = input1.value * pr1.innerHTML;
+});
+plus1.addEventListener('click',function(){
+    input1.stepUp();
+    var printBlock = document.getElementById("0_sum");
+    printBlock.textContent = input1.value * pr1.innerHTML;
+});
+}
+catch (err) {}
+
+try {
+var minus2 = document.getElementById('1_minus'),
+plus2 = document.getElementById('1_plus'),
+input2 = document.getElementById('1_fm');
+// обработчик ввода символа2
+input2.oninput = function() {
+    document.getElementById('1_sum').innerHTML = input2.value * pr2.innerHTML + "₽";
+  };
+minus2.addEventListener('click',function(){
+    input2.stepDown();
+    var printBlock = document.getElementById("1_sum");
+    printBlock.textContent = input2.value * pr2.innerHTML + "₽";
+});
+plus2.addEventListener('click',function(){
+    input2.stepUp();
+    var printBlock = document.getElementById("1_sum");
+    printBlock.textContent = input2.value * pr2.innerHTML + "₽";
+});
+}
+catch (err) {}
+
+try {
+var minus3 = document.getElementById('2_minus'),
+plus3 = document.getElementById('2_plus'),
+input3 = document.getElementById('2_fm');
+// обработчик ввода символа3
+input3.oninput = function() {
+    document.getElementById('2_sum').innerHTML = input3.value * pr3.innerHTML + "₽";
+  };
+minus3.addEventListener('click',function(){
+    input3.stepDown();
+    var printBlock = document.getElementById("2_sum");
+    printBlock.textContent = input3.value * pr3.innerHTML + "₽";
+});
+plus3.addEventListener('click',function(){
+    input3.stepUp();
+    var printBlock = document.getElementById("2_sum");
+    printBlock.textContent = input3.value * pr3.innerHTML + "₽";
+});
+}
+catch (err) {}
+
+try {
+var minus4 = document.getElementById('3_minus'),
+plus4 = document.getElementById('3_plus'),
+input4 = document.getElementById('3_fm');
+// обработчик ввода символа2
+input4.oninput = function() {
+    document.getElementById('3_sum').innerHTML = input4.value * pr4.innerHTML + "₽";
+  };
+minus4.addEventListener('click',function(){
+    input4.stepDown();
+    var printBlock = document.getElementById("3_sum");
+    printBlock.textContent = input4.value * pr4.innerHTML + "₽";
+});
+plus4.addEventListener('click',function(){
+    input4.stepUp();
+    var printBlock = document.getElementById("3_sum");
+    printBlock.textContent = input4.value * pr4.innerHTML + "₽";
+});
+}
+catch (err) {}
+
+try {
+var minus5 = document.getElementById('4_minus'),
+plus5 = document.getElementById('4_plus'),
+input5 = document.getElementById('4_fm');
+// обработчик ввода символа2
+input5.oninput = function() {
+    document.getElementById('4_sum').innerHTML = input5.value * pr5.innerHTML + "₽";
+  };
+minus5.addEventListener('click',function(){
+    input5.stepDown();
+    var printBlock = document.getElementById("4_sum");
+    printBlock.textContent = input5.value * pr5.innerHTML + "₽";
+});
+plus5.addEventListener('click',function(){
+    input5.stepUp();
+    var printBlock = document.getElementById("4_sum");
+    printBlock.textContent = input5.value * pr5.innerHTML + "₽";
+});
+}
+catch (err) {}
+
+try {
+var minus6 = document.getElementById('5_minus'),
+plus6 = document.getElementById('5_plus'),
+input6 = document.getElementById('5_fm');
+// обработчик ввода символа2
+input6.oninput = function() {
+    document.getElementById('5_sum').innerHTML = input6.value * pr6.innerHTML + "₽";
+  };
+minus6.addEventListener('click',function(){
+    input6.stepDown();
+    var printBlock = document.getElementById("5_sum");
+    printBlock.textContent = input6.value * pr6.innerHTML + "₽";
+});
+plus6.addEventListener('click',function(){
+    input6.stepUp();
+    var printBlock = document.getElementById("5_sum");
+    printBlock.textContent = input6.value * pr6.innerHTML + "₽";
+});
+}
+catch (err) {}
+
+
+</script>
+{% endblock %}
+
+{% block content_2 %}
+{% for i in amount %}
+<a href="{{i}}">{{i}}</a>
+{%endfor%}
+{% endblock %}
+
+{% block content_3 %}
+<a href="{%url 'home' %}" class="floating-button">домой</a>
+{% endblock %}
+

@@ -1,0 +1,367 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head><title></title></head>
+{%load static%}
+<body id="body" style="height:100%">
+
+<header><h1 align ="left" id="ARABICA">ARABICA</h1>
+<a href="{%url 'basket'%}" class="floating-button">Корзина</a>
+<a href="{%url 'like'%}" class="floating-button">понравившееся</a>
+<a href="../accounts/login" class="floating-button">вход</a>
+<a href="../accounts/logout" class="floating-button">выход</a>
+<a href="../accounts/signup" class="floating-button">регистрация</a>
+{% if user.is_superuser %}
+ <a href="admin" class="floating-button" color ="red">АДМИНКА</a>
+{% endif %}
+</header>
+
+<main>
+<aside>
+{% block content_3 %}
+{% endblock %}
+<a href="{%url 'coffee' 1%}" class="floating-button_3">кофе</a>
+<a href="{%url 'sweets' 1%}" class="floating-button_3">кондитерские изделия</a>
+<a href="{%url 'tea' 1%}" class="floating-button_3">чай</a>
+<a href="{%url 'presents' 1%}" class="floating-button_3">подарочные наборы</a>
+<a href="{%url 'liq' 1%}" class="floating-button_3">сиоропы</a>
+    {% for el in ctg_on_site %}
+      <a href="{{el.get_absolute_url}}" class="floating-button_3">{{el.name}}</a> 
+    {%endfor%}
+</aside>
+
+<article>
+
+<div class="border">
+<div class="border-top"></div>
+
+<div class="center" id="cont"> 
+{% block content %}
+{% for el in product_on_site %}
+
+<div class="pro" id="{% cycle 'row1' 'row2' %}">
+<h2><a href="{%url 'coffee_dv' el.id%}" class="floating-button_2">{{ el.name }}</a></h2>
+<b><p>ЦЕНА - {{ el.price }} ₽ | В наличии {{el.amount}} грамм</p></b>
+
+<img src="../../{{el.image}}" class="pro_img"/>
+<p>{{el.desc}}</p>
+ Старая цена:{{el.old_price}}
+</div>
+{% endfor %}
+
+ {% endblock %}
+</div>
+
+<div class="border-bottom">{% block content_2 %}{% endblock %}</div>
+</div>
+
+</article>
+
+</main>
+
+{% for el in foot %}
+<footer>
+    
+    <div><h2>Адреса</h2>
+        <p>{{el.adr|linebreaks}}</p>
+    </div>
+
+    
+    <div><h2>Контакты</h2>
+        <p>{{el.cont|linebreaks}}</p>
+    </div>
+    
+    
+    <div><h2>Дополнительная информация</h2>
+        <p>{{el.t_1|linebreaks}}</p>
+    </div>
+    
+</footer>
+
+{% endfor %}
+<form name="search">
+    <input name="message"/>
+</form>
+
+<form name="search_1">
+    <input name="message_1"/>
+</form>
+
+<div id="printBlock"></div>
+<style>
+    @font-face {
+   font-family: "fname"; 
+   src: url("../../static/media/fonts/st.otf"); 
+}
+    h1 {
+        font-family: fname;
+        text-shadow: #89ed8f 1px 0 10px;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+    #ARABICA {
+        margin-left: 30px;
+    }
+    h3 {
+        margin:0;
+        padding:0;
+    }
+    html {
+       height: auto;
+    display: flex;
+    flex-direction: column;
+
+    }
+    body {
+        background-image: url(../../static/media/img/light_wood3.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+    }
+    header {
+    width: 100%;
+    background-color: beige;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    background-color: #e9dec5;
+    border: 6px solid #af8b52b5;
+    border-radius: 15px 100px 15px 100px;
+    }
+    main {
+        height: fit-content;
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-radius: 15px
+    }
+    article {
+        background-color: beige;
+        width: 100%;
+        height: fit-content;
+        /* max-height: 90%; */
+        margin-left: 10px;
+        /* margin-bottom: 0px; */
+        display: flex;
+        box-sizing: border-box;
+        flex-direction: column;
+        border-radius: 15px;
+    }
+    aside {
+    width: 20%;
+    height: 60%;
+    background-color: #e9dec5;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    border-radius: 15px;
+    border: 6px solid #af8b52b5;
+    align-items: center
+    }
+    footer {
+    width: 100%;
+    background-color: #e9dec5;
+    height: 200px;
+    /* margin-top: 10px; */
+    display: flex;
+    border-radius: 25px;
+    border: 6px solid #af8b52b5;
+    display: flex;
+    font-family: 'Montserrat', sans-serif;
+    justify-content: space-around;
+    }
+
+    .pro{
+    width: 32.5%;
+    max-height: 30%;
+    display: flex;
+    float: left;
+    border: 3px solid #e3cead;
+    border-radius: 40px;
+    font-family: cursive;
+    flex-direction: column;
+    align-items: center;
+    }
+
+    .pro_img {
+        max-width:70%;
+        max-height:70%;
+    }
+/*_________________________________________*/  
+    .border {
+    background: #e9dec5;
+    padding: 40px;
+    /* max-height: 90%; */
+    height: fit-content;
+    border-radius: 15px;
+}
+.border-top, 
+.border-bottom {
+  border: 3px solid #AF8B52;
+  height: 20px;
+  position: relative;
+}
+.border-top:before, 
+.border-top:after, 
+.border-bottom:before, 
+.border-bottom:after {
+  content: "";
+  position: absolute;
+  border: 3px solid #AF8B52;
+  width: 20px;
+  height: 20px;
+}
+.border-top:before {
+  border-radius: 0 100%;
+  left: -26px;
+  top: -26px;
+}
+.border-top:after {
+  border-radius: 100% 0;
+  right: -26px;
+  top: -26px;
+}
+.border-bottom:before {
+  border-radius: 100% 0;
+  left: -26px;
+  bottom: -26px;
+}
+.border-bottom:after {
+  border-radius: 0 100%;
+  right: -26px;
+  bottom: -26px;
+}
+.center {
+  border-left: 3px solid #AF8B52;
+  border-right: 3px solid #AF8B52;
+  max-height:90%;
+  display: flex;
+    /* flex-direction: row-reverse; */
+    flex-wrap: wrap;
+}
+
+/*________________________________________________________________*/
+
+/*_________________________________________*/
+    .floating-button {
+        text-decoration: none;
+        outline: none;
+        display: inline-block;
+        width: 140px;
+        height: 45px;
+        line-height: 45px;
+        border-radius: 5px;
+        margin: 10px 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-weight: 600;
+        color: black;
+        background: #9acd3285;
+        /*box-shadow: 0px 8px 15px #BAE498;*/
+        transition: .3s;
+        text-align:center;
+        margin:2px;
+    }
+    .floating-button_2 {
+        text-decoration: none;
+        outline: none;
+        display: inline-block;
+        width: fit-content;
+        height: fit-content;
+        line-height: 25px;
+        border-radius: 5px;
+        margin: 10px 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-weight: 600;
+        color: black;
+        background: #9acd3285;
+        /*box-shadow: 0px 8px 15px #BAE498;*/
+        transition: .3s;
+        text-align:center;
+        margin:2px;
+    }
+    .floating-button_3 {
+        text-decoration: none;
+        outline: none;
+        display: inline-block;
+        width: 95%;
+        height: 45px;
+        line-height: 45px;
+        border-radius: 5px;
+        margin: 10px 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-weight: 600;
+        color: black;
+        background: #9acd3285;
+        /*box-shadow: 0px 8px 15px #BAE498;*/
+        transition: .3s;
+        text-align:center;
+        margin:2px;
+    }
+    .floating-button:hover {
+  background: #ffa03e;
+  /*box-shadow: 0 15px 20px #ffa03e;*/
+  color: black;
+  transform: translateY(-7px);
+}
+    .floating-button_3:hover {
+  background: #ffa03e;
+  /*box-shadow: 0 15px 20px #ffa03e;*/
+  color: black;
+  transform: translateY(-7px);
+}
+    .buy_button {
+    width: 80%;
+    height: 50%;
+    align: center;
+    background-color: #9acd3285;
+    border-color: aliceblue;
+    border-radius: 20px;
+    font-family: cursive;
+    }
+    .pm {
+    margin: 2px;
+    background-color: #9acd3285;
+    border-color: aliceblue;
+    border-radius: 20px;
+    width: 10%;
+    height: 50%;
+    }
+    .form_buy {
+    width: -webkit-fill-available;
+    height: 35%;
+    border-color: bisque;
+    text-align: center;
+    font-size: inherit;
+    }
+    .b1_pro {
+
+    
+display: flex;
+    height: 60%;
+    width: 90%;
+    align: center;
+    }
+    .b2_pro {
+height: 17%;
+    width: 96%;
+    
+    }
+</style>
+
+</body>
+</html>

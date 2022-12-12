@@ -1,0 +1,38 @@
+{% extends 'presents/home.html' %}
+
+
+{% block content %}
+<div class="pro_dv">
+<h3>{{ el.name }}</h3>
+<b><p>ЦЕНА - {{ el.price }} В наличии {{el.amount}} грамм</p></b>
+<img src="../../{{el.image}}" class="pro_img"/>
+<p>{{el.full_desc}}</p>
+
+<div>
+    <form method="post">
+    {% csrf_token %}
+    <button name="to_basket" value="{{el.id}}" type="submit">В корзину</button>
+    </form>
+</div>
+
+<div>
+    <form method="post">
+    {% csrf_token %}
+    <button name="to_like" value="{{el.id}}" type="submit">в понравившееся</button>
+    </form>
+</div>
+    
+</div>
+{% endblock %}
+
+{% block content_2 %}
+{% endblock %}
+
+{% block content_3 %}
+<a href="{%url 'home' %}">домой</a>
+{% endblock %}
+<style>
+    .pro_dv {
+
+    }
+</style>

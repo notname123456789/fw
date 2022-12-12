@@ -1,0 +1,47 @@
+{% extends 'coffee/home.html' %}
+
+
+{% block content %}
+{% for el in pib %}
+
+<div class="pro" id="{% cycle 'row1' 'row2' %}">
+<h3>{{ el.name }}</h3>
+<b><p>{{ el.price }}</p></b>
+<b><p>{{ el.amount}}</p></b>
+<img src="../../{{el.image}}" class="pro_img"/>
+<p>{{el.desc}}</p>
+<a href="{%url 'coffee_dv' el.id%}">просмотр</a>
+
+<div>
+
+        <form class="decor" method="post">
+        {% csrf_token %}
+        <div>
+            Район:{{Reg.reg}}
+            {{buy_out.adress}}
+            {{buy_out.phone}}
+            <input type="submit" value="Отправить" name="send_code">
+        </div>
+    </form>
+
+        <form class="decor" method="post">
+        {% csrf_token %}
+        <div>
+            {{code_out.CODE}}
+            <input type="submit" value="Отправить" name="confirm_code">
+        </div>
+    </form>
+
+
+</div>
+</div>
+
+{%endfor%}
+{% endblock %}
+
+{% block content_2 %}
+{% endblock %}
+
+{% block content_3 %}
+<a href="{%url 'home' %}" class="floating-button">домой</a>
+{% endblock %}
